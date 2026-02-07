@@ -1,8 +1,10 @@
-services:
-  - type: web
-    name: fire-detection-backend
-    env: python
-    plan: free
-    runtime: python3.11
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app:app --host 0.0.0.0 --port 10000
+fastapi
+uvicorn
+python-multipart
+pillow
+
+ultralytics==8.0.231
+
+torch==2.5.1+cpu
+torchvision==0.21.0+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu

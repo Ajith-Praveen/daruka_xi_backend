@@ -2,7 +2,9 @@ fastapi
 uvicorn
 python-multipart
 pillow
-ultralytics
-torch==2.1.2+cpu
-torchvision==0.16.2+cpu
+
+ultralytics==8.0.231
+
+torch==2.5.1+cpu
+torchvision==0.20.1+cpu
 --extra-index-url https://download.pytorch.org/whl/cpu

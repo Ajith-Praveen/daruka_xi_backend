@@ -3,11 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 from PIL import Image
 import io
-import time
 
 app = FastAPI()
 
-# CORS (VERY IMPORTANT for browser camera)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,18 +13,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model = YOLO("best.pt")  # fire detection model
+model = YOLO("best.pt")
+model.fuse()
 
-@app.get("/")
+@app.get("/health")
 def health():
     return {"status": "ok"}
 
 @app.post("/detect")
 async def detect(image: UploadFile = File(...)):
-    start = time.time()
-
     img_bytes = await image.read()
     img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
+    img = img.resize((640, 480))
 
     results = model(img, conf=0.25, verbose=False)
 
@@ -40,7 +38,4 @@ async def detect(image: UploadFile = File(...)):
                 "bbox": [x1, y1, x2, y2]
             })
 
-    return {
-        "latency_ms": int((time.time() - start) * 1000),
-        "detections": detections
-    }
+    return detections
